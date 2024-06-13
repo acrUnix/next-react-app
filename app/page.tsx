@@ -1,4 +1,5 @@
 import AcmeLogo from '@/app/ui/acme-logo';
+import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -17,6 +18,7 @@ export default function Page() {
             </a>
             , implementado por vercel.
           </p>
+          
           <Link
             href="/login"
             className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
@@ -27,6 +29,20 @@ export default function Page() {
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           {/* Add Hero Images Here */}
         </div>
+          <Image
+          src='/hero-desktop.png'
+          alt='imgen no encontrada'
+          width={1000}
+          height={750}
+          className='hidden md:block'
+          />
+          <Image
+          src='/hero-mobile.png'
+          alt='imgen no encontrada'
+          width={560}
+          height={620}
+          className='block md:hidden'
+          />
       </div>
     </main>
   );
