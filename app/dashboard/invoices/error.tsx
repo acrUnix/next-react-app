@@ -20,7 +20,7 @@ return (
         onClick={
           // Attempt to recover by trying to re-render the invoices route
           () => reset()
-        }
+        } 
       >
         Try again
       </button>

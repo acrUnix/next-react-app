@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
-  CustomerField,
+  CustomerField, 
   CustomersTableType,
   InvoiceForm,
   InvoicesTable,
@@ -161,7 +161,6 @@ export async function fetchInvoiceById(id: string) {
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
-
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);

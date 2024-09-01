@@ -18,6 +18,7 @@ const links = [
     icon: DocumentDuplicateIcon,
   },
   { name: 'personalizar', href: '/dashboard/customers', icon: UserGroupIcon },
+  {name: 'home', href: '/dashboard/home', icon: UserGroupIcon }
 ];
 
 export default function NavLinks() {
@@ -30,8 +31,8 @@ export default function NavLinks() {
           <Link
             key={link.name}
             href={link.href}
-            className={`flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-black-600 md:flex-none md:justify-start md:p-2 md:px-3
-              ${pathname === link.href ? 'bg-sky-200 text-black-600' : ''}
+            className={`flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-200 p-3 text-sm font-medium hover:bg-sky-100 md:flex-none md:justify-start md:p-2 md:px-3
+              ${pathname === link.href ? 'bg-sky-200 text-black' : ''}
               `}
           >
             <LinkIcon className="w-6" />

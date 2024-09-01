@@ -5,8 +5,7 @@ import { lusitana } from "../ui/fonts"
 import { LatestInvoicesSkeleton, RevenueChartSkeleton, CardSkeleton } from "../ui/skeletons"
 import CardWrapper from "../ui/dashboard/cards"
 
-export default async function Dash() {
-
+export default async function DashPage() {
     return (
         <>
                 <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>

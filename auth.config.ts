@@ -1,12 +1,15 @@
 import type { NextAuthConfig } from 'next-auth';
- 
-export const authConfig = {
+console.log('entro aca: auth.config.ts');
+
+
+export const authConfig = { 
   pages: {
     signIn: '/login',
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
+      console.log('entro aca: authorized, auth.config.ts: ', auth?.user);
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       if (isOnDashboard) {
         if (isLoggedIn) return true;

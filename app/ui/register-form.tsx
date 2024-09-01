@@ -41,7 +41,6 @@ export default function RegisterForm() {
                     name='username'
                     aria-describedby='username-error'
                     placeholder='please, type a username'
-                    required
                     />
                 </div>
                 <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -69,7 +68,6 @@ export default function RegisterForm() {
                 name="email"
                 aria-describedby='email-error'
                 placeholder="Enter your email address"
-                required
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -95,13 +93,13 @@ export default function RegisterForm() {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="Enter password"
-                required
-                minLength={6}
+                placeholder="Please, type a password"
+                aria-describedby='password-error'
+                minLength={5}
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-            <div id="username-error" aria-live="polite" aria-atomic="true">
+            <div id="password-error" aria-live="polite" aria-atomic="true">
               {state.errors?.password &&
           state.errors.password.map((error: string) => (
             <p className="rounded-md mt-2 border-2 border-rose-200 text-sm text-red-500" key={error}>
@@ -134,7 +132,7 @@ function LoginButton() {
 
   return (
     <Button className="mt-4 w-full" aria-disabled={pending}>
-      Register <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+      Send <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
     </Button>
   );
 }

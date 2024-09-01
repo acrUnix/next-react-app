@@ -5,11 +5,13 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache';
  
 async function getUser(email: string): Promise<User | undefined> {
+  console.log('entro aca: getUser: Auth.ts', email);
   try {
     const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
+    console.log('user encontrado en Auth.ts: ', user);
     return user.rows[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);
@@ -23,14 +25,21 @@ export const { auth, signIn, signOut } = NextAuth({
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
+          .object({ 
+            email: z.string().email(),
+            password: z.string().min(6)
+          })
           .safeParse(credentials);
  
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
-          console.log('contraseña y ...authconfig: ', password, authConfig)
+          console.log('entro aca: ParsedCredentials.success, Auth.ts', email)
+
           const user = await getUser(email);
-          if (!user) return null;
+          if (!user) {
+            console.log('entro aca: parseCredentials.success user, Auth.ts: ', user);
+            return null;
+          }
           const passwordsMatch = await bcrypt.compare(password, user.password);
  
           if (passwordsMatch) return user;
@@ -41,4 +50,6 @@ export const { auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-});
+}
+
+);

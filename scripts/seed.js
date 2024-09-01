@@ -121,7 +121,7 @@ async function seedCustomers(client) {
     };
   } catch (error) {
     console.error('Error seeding customers:', error);
-    throw error;
+    throw error;async
   }
 }
 
@@ -160,7 +160,7 @@ async function seedRevenue(client) {
   }
 }
 
-async function main() {
+ async function main() {
   const client = await db.connect();
 
   await seedUsers(client);

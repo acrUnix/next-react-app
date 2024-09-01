@@ -1,10 +1,11 @@
 'use server'
-import { sql } from  '@vercel/postgres'
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { sql } from  '@vercel/postgres';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import { date, z } from 'zod'
+import { z } from 'zod';
+import bcrypt from 'bcrypt';
 
 export type State = {
     errors?:{
@@ -50,15 +51,11 @@ const CreateInvoiceFormSchema = CreateInvoiceSchema.omit({
 
 
 const CreateRegisterSchema = z.object({
-  username: z.string({
-    invalid_type_error: 'Please select a username.',
+  username: z.string().min(2, { message: "Must be 2 or more characters long" }),
+  email: z.string().email({ 
+    message: "Invalid email address" 
   }),
-  email: z.string({
-    invalid_type_error: 'Please type a email adress.',
-  }),
-  password: z.string({
-    invalid_type_error: 'Please type a password.',
-  }),
+  password: z.string().min(6, { message: "Must be 6 or more characters long" }),
 });
 
 
@@ -101,6 +98,8 @@ try{
     redirect('/dashboard/invoices')
 
 }
+
+
 
 export async function updateInvoice (id: string, prevState: State, formData: FormData){
 
@@ -148,7 +147,7 @@ export async function deleteInvoice (id: string){
 
 
 export async function register(prevState: regState, formData: FormData){
-
+console.log('entro aca: register');
   const validatedFields = CreateRegisterSchema.safeParse({
     username: formData.get('username'),
     email: formData.get('email'),
@@ -163,24 +162,25 @@ if(!validatedFields.success){
     }
 }
 
-const generateId = () => crypto.randomUUID()
-const {username, email, password} = validatedFields.data
+let uuid = crypto.randomUUID();
+const {username, email, password} = validatedFields.data;
 
-/*try{
-await sql`
-INSERT INTO invoices (customer_id, amount, status, date)
-VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-`
-}catch (error){
+try{
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+        await sql`
+        INSERT INTO users (id, name, email, password)
+        VALUES (${uuid}, ${username}, ${email}, ${hashedPassword})
+        ON CONFLICT (id) DO NOTHING;
+      `;
+
+}catch(error){
 return {
-    message: 'Error BD: No se pudo crear la factura'
+  message: 'se ha producido un error'
 }
-} */
-
-
-
-revalidatePath('/dashboard/invoices')
-redirect('/dashboard/invoices')
+}
+revalidatePath('/');
+redirect('/login');
 
 }
 
@@ -190,8 +190,12 @@ export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
 ) {
+
+  console.log('entro aca: authenticate');
   try {
     await signIn('credentials', formData);
+    revalidatePath('/');
+    
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -200,7 +204,9 @@ export async function authenticate(
         default:
           return 'Something went wrong.';
       }
+      
     }
     throw error;
   }
+
 }
